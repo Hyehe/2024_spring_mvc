@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ajaxmembers"> <!-- 테이블 이름이 아님 -->
+	<select id="getMembersList" resultType="com.ict.edu04.vo.MembersVO">
+		select * from members order by m_idx <!-- 프라이머리키(m_idx)로 오름차순 정렬 -->
+	</select>
+	
+	<select id= "getMemberIdChk" parameterType="String" resultType="int">
+		select count(*) from members where m_id = #{m_id} <!-- * 대신 m_id 작성 가능 -->
+	</select>
+	
+	<insert id="getMemberInsert" parameterType="com.ict.edu04.vo.MembersVO">
+		insert into members (m_id, m_pw, m_name, m_age, m_reg)
+		value(#{m_id},#{m_pw},#{m_name},#{m_age}, DATE(NOW()))	<!-- datetime은 NOW(년,월)만 하면 됨 -->
+	</insert>
+	
+	<delete id="getMemberDelete" parameterType="String">
+		delete from members where m_idx = #{m_idx}
+	</delete>
+	
+</mapper>

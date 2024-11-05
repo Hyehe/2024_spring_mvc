@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- root-context.xml 에 mybatis 와 jdbc 설정을 추가한다. -->
+	<!-- id 첫글자 소문자로 한다. -->
+	
+	<!-- 나중에 DB 정보를 입력하는 곳(공통으로 사용되는 객체(bean)를 만드는 공간) -->
+	<!-- MySQL 접속 정보 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/ictedu_db"/>
+		<property name="username" value="ictedu"/>
+		<property name="password" value="1111"/>
+	</bean>		<!-- bean => 자동 개체생성 -->
+	
+	<!-- mybatis : config역할을 함(mapper 위치) -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>  <!-- ref 위에 있는 것(9~13)을 참조함. -->
+		<property name="mapperLocations" value="classpath*:com/ict/*/service/*_mapper.xml"></property>
+	</bean>
+	
+	<!-- mybatis : SqlSessionTemplate (실제 실행하는 클래스) -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactoryBean"/>  <!-- ref 위에 있는 것(9~21)을 참조함. -->
+	</bean>
+	
+	<!-- DAO -->
+	<bean id="m_dao" class="com.ict.edu02.dao.MemberDAO">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>  <!-- ref 위에 있는 것(9~26)을 참조함. -->
+	</bean>
+	
+	<!-- 사용자가 com.ict.edu02.dao 패키지에 MemberDAO 만들기 -->
+	
+</beans>
